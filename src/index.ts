@@ -1002,6 +1002,72 @@ class TrelloServer {
       }
     );
 
+    // Get all checklists from a card
+    this.server.registerTool(
+      'get_card_checklists',
+      {
+        title: 'Get Card Checklists',
+        description: 'Get all checklists from a card by card ID',
+        inputSchema: {
+          cardId: z.string().describe('ID of the card to get checklists from'),
+        },
+      },
+      async ({ cardId }) => {
+        try {
+          const checklists = await this.trelloClient.getCardChecklists(cardId);
+          return {
+            content: [{ type: 'text' as const, text: JSON.stringify(checklists, null, 2) }],
+          };
+        } catch (error) {
+          return this.handleError(error);
+        }
+      }
+    );
+
+    // Get checklist by ID
+    this.server.registerTool(
+      'get_checklist_by_id',
+      {
+        title: 'Get Checklist by ID',
+        description: 'Get a checklist directly by its ID',
+        inputSchema: {
+          checklistId: z.string().describe('ID of the checklist to retrieve'),
+        },
+      },
+      async ({ checklistId }) => {
+        try {
+          const checklist = await this.trelloClient.getChecklistById(checklistId);
+          return {
+            content: [{ type: 'text' as const, text: JSON.stringify(checklist, null, 2) }],
+          };
+        } catch (error) {
+          return this.handleError(error);
+        }
+      }
+    );
+
+    // Get board by ID
+    this.server.registerTool(
+      'get_board',
+      {
+        title: 'Get Board',
+        description: 'Get detailed information about a specific board by its ID',
+        inputSchema: {
+          boardId: z.string().describe('ID of the board to retrieve'),
+        },
+      },
+      async ({ boardId }) => {
+        try {
+          const board = await this.trelloClient.getBoardById(boardId);
+          return {
+            content: [{ type: 'text' as const, text: JSON.stringify(board, null, 2) }],
+          };
+        } catch (error) {
+          return this.handleError(error);
+        }
+      }
+    );
+
     // Member management tools
     this.server.registerTool(
       'get_board_members',

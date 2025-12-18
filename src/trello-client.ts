@@ -594,6 +594,25 @@ export class TrelloClient {
   }
 
   // Checklist methods
+
+  /**
+   * Get all checklists from a card by card ID
+   */
+  async getCardChecklists(cardId: string): Promise<TrelloChecklist[]> {
+    const response = await this.axiosInstance.get(`/cards/${cardId}/checklists`);
+    return response.data;
+  }
+
+  /**
+   * Get a checklist by its ID
+   */
+  async getChecklistById(checklistId: string): Promise<TrelloChecklist> {
+    return this.handleRequest(async () => {
+      const response = await this.axiosInstance.get(`/checklists/${checklistId}`);
+      return response.data;
+    });
+  }
+
   async getChecklistItems(name: string, cardId?: string, boardId?: string): Promise<CheckListItem[]> {
     let checklists: TrelloChecklist[];
 
